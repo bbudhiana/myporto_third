@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /login
+Disallow: /resume
+Allow: /
+
+Sitemap: http://localhost:9007/sitemap.xml
