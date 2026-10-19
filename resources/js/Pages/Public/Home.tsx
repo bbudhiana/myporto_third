@@ -61,12 +61,12 @@ export default function Home({
             </Head>
 
             {/* Hero Section per PRD 5.1 & 6.3 */}
-            <section className="py-16 sm:py-24 border-b border-[#DDE5EA]">
+            <section className="py-16 sm:py-24 border-b border-[#DDE5EA] bg-gradient-to-tr from-[#F0F7F6]/10 to-[#E3F3EF]/10">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                         <div className="lg:col-span-7 space-y-6">
                             <div className="inline-flex items-center gap-2">
-                                <Badge variant="accent">Portofolio Profesional</Badge>
+                                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#0F766E]/10"><span className="text-[0F766E]">*</span><span className="text-xs font-medium text-[#0F766E] uppercase tracking-wider">Portofolio Profesional</span></div>
                                 {profile?.location && (
                                     <span className="text-xs text-[#475569] font-medium">
                                         {profile.location}
@@ -75,34 +75,34 @@ export default function Home({
                             </div>
 
                             <div className="space-y-3">
-                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#172B3A] tracking-tight leading-[1.15]">
+                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-[#172B3A] tracking-tight leading-[1.15]">
                                     {displayName}
                                 </h1>
-                                <p className="text-xl sm:text-2xl font-semibold text-[#0F766E] tracking-tight">
+                                <p className="text-xl sm:text-2xl font-bold bg-[length:0pt_0pt_0pt_1.5pt] bg-gradient-to-r from-[#0F766E] to-[#115E59] bg-clip-text text-transparent">
                                     {headline}
                                 </p>
                             </div>
 
-                            <p className="text-base sm:text-lg text-[#475569] leading-relaxed max-w-2xl">
+                            <p className="text-base sm:text-lg font-medium text-[#475569] leading-relaxed max-w-2xl">
                                 {heroSummary}
                             </p>
 
                             <div className="flex flex-wrap items-center gap-4 pt-2">
-                                <Button href="#projects" variant="primary" size="lg">
+                                <Button href="#projects" variant="primary" size="lg" className="hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">
                                     Lihat Proyek
                                 </Button>
-                                <Button href="#contact" variant="secondary" size="lg">
+                                <Button href="#contact" variant="secondary" size="lg" className="hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">
                                     Hubungi Saya
                                 </Button>
                                 {profile?.hasResume && (
-    <a href="/resume" className="inline-flex items-center justify-center font-medium rounded-xl transition duration-150 ease-in-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] border border-[#DDE5EA] bg-white text-[#172B3A] hover:bg-[#F0F7F6] hover:border-[#64748B] active:bg-[#E3F3EF] px-6 py-3.5 text-lg">Unduh CV</a>
+    <a href="/resume" className="inline-flex items-center justify-center font-medium rounded-xl transition duration-150 ease-in-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] border border-[#DDE5EA] bg-white text-[#172B3A] hover:bg-[#F0F7F6] hover:border-[#64748B] active:bg-[#E3F3EF] px-6 py-3.5 text-lg hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">Unduh CV</a>
                                 )}
                             </div>
                         </div>
 
                         {/* Monogram / Visual Composition (5 cols) */}
                         <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                            <div className="w-full max-w-sm rounded-3xl bg-gradient-to-br from-white to-[#F0F7F6] border border-[#DDE5EA] p-8 shadow-xs flex flex-col items-center text-center space-y-6">
+                            <div className="w-full max-w-sm rounded-full border-4 border-[#0F766E]/20 bg-white p-4 flex flex-col items-center text-center space-y-4 hover:scale-[1.03] hover:transition-transform">
                                  {profile?.portraitUrl ? (
                                      <img
                                          src={profile.portraitUrl}
@@ -192,20 +192,20 @@ export default function Home({
                             >
                                 <Card hoverEffect className="h-full flex flex-col justify-between">
                                     <div className="space-y-4">
-                                        {project.coverUrl ? (
-                                            <img
-                                                src={project.coverUrl}
-                                                alt={project.title}
-                                                className="w-full h-44 object-cover rounded-xl border border-[#DDE5EA]"
-                                                loading="lazy"
-                                            />
-                                        ) : (
-                                            <div className="h-44 rounded-xl bg-[#F0F7F6] border border-[#DDE5EA] flex items-center justify-center p-6 text-center group-hover:bg-[#E3F3EF] transition-colors">
-                                                <span className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
-                                                    {project.category}
-                                                </span>
-                                            </div>
-                                        )}
+                                         {project.coverUrl ? (
+                                             <img
+                                                 src={project.coverUrl}
+                                                 alt={project.title}
+                                                 className="w-full h-44 object-contain rounded-xl border border-[#DDE5EA]"
+                                                 loading="lazy"
+                                             />
+                                         ) : (
+                                             <div className="h-44 rounded-xl bg-[#F0F7F6] border border-[#DDE5EA] flex items-center justify-center p-6 text-center group-hover:bg-[#E3F3EF] transition-colors">
+                                                 <span className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
+                                                     {project.category}
+                                                 </span>
+                                             </div>
+                                         )}
 
                                         <div className="space-y-3">
                                             <Badge variant="neutral">{project.category}</Badge>
@@ -303,8 +303,8 @@ export default function Home({
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {skillGroups.map((group) => (
-                            <Card key={group.id} soft className="space-y-4">
+                        {skillGroups.map((group, index) => (
+                            <Card key={group.id} soft className={`${index === 0 ? "space-y-4 border-2 border-[#0F766E]/20" : "space-y-4 border border-[#DDE5EA]/50"} hover:border-[#F0F7F6]/50 hover:transition-colors`}>
                                 <div>
                                     <h3 className="font-bold text-base text-[#172B3A]">
                                         {group.name}

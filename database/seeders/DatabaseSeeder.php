@@ -128,7 +128,9 @@ class DatabaseSeeder extends Seeder
                         'sort_order' => $sIndex + 1,
                     ]
                 );
-            }
+                $this->call(\Database\Seeders\Tables\CacheLocksSeeder::class);
+        $this->call(\Database\Seeders\Tables\ContactMessagesSeeder::class);
+    }
         }
 
         // 5. Featured Projects per PRD 5.3

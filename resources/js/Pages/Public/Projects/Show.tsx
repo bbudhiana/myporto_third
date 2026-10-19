@@ -91,15 +91,15 @@ export default function ProjectShow({ project }: Props) {
                     </header>
 
                     {/* Cover Media if present */}
-                    {project.coverUrl && (
-                        <div className="rounded-2xl overflow-hidden border border-[#DDE5EA] shadow-xs">
-                            <img
-                                src={project.coverUrl}
-                                alt={project.title}
-                                className="w-full h-auto max-h-[480px] object-cover"
-                            />
-                        </div>
-                    )}
+                                 {project.coverUrl && (
+                         <div className="rounded-2xl overflow-hidden border border-[#DDE5EA] shadow-xs">
+                             <img
+                                 src={project.coverUrl}
+                                 alt={project.title}
+                                 className="w-full h-auto object-contain"
+                             />
+                         </div>
+                     )}
 
                     {/* Study Case Core Sections per PRD 5.3 */}
                     <div className="space-y-10 pt-6">
