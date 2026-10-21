@@ -1,0 +1,181 @@
+<?php
+namespace Database\Seeders\Tables;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class ExperiencesSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        /**
+         * Command :
+         * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
+         *
+         */
+
+        $dataTables = [
+            [
+                'created_at' => '2026-10-08 16:14:26',
+                'description_markdown' => 'Mengembangkan perangkat lunak dan integrasi AI dengan menerjemahkan kebutuhan bisnis menjadi solusi teknis yang terstruktur, andal, dan mudah dipelihara. Lingkup peran mencakup perancangan arsitektur aplikasi, pengembangan layanan backend dan antarmuka pengguna, serta integrasi model AI ke dalam alur kerja yang relevan. Pendekatan engineering menekankan kualitas kode, keamanan data, pengujian, dan evaluasi keluaran AI agar solusi dapat digunakan secara bertanggung jawab dalam konteks operasional.',
+                'employment_type' => 'Freelance',
+                'end_month' => NULL,
+                'end_year' => NULL,
+                'id' => 1,
+                'is_current' => 1,
+                'location' => 'Tangerang dan Jakarta',
+                'organization' => 'Independen',
+                'published_at' => '2026-10-08 16:14:26',
+                'sort_order' => 1,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => NULL,
+                'start_year' => 2026,
+                'status' => 'published',
+                'title' => 'Senior Software and AI Engineer',
+                'updated_at' => '2026-10-08 16:14:26',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => '2026-10-08 16:14:26',
+            ],
+            [
+                'created_at' => '2026-10-09 15:04:52',
+                'description_markdown' => 'Manage IT Development, PM Team, and Infrastructure Staff. Manage Security, Infrastructure, and Tools for IT Purpose. IT Plan and Services for other departments (cost and infrastructure]. Create IT Policies & Roles. Make Work Standardization for Development, PM, and Infrastructure. Carry out CTO\'s daily tasks. AI Development Integration (Claude Code, Z.AI with GLM, Antigravity, Gemini, ChatGPT]',
+                'employment_type' => 'Full-time',
+                'end_month' => 1,
+                'end_year' => 2026,
+                'id' => 2,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT Bahaso Intermedia Cakrawala',
+                'published_at' => '2026-10-09 15:04:52',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 11,
+                'start_year' => 2022,
+                'status' => 'published',
+                'title' => 'Deputy CTO',
+                'updated_at' => '2026-10-09 16:51:24',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ],
+            [
+                'created_at' => '2026-10-09 15:11:43',
+                'description_markdown' => 'Manage IT Development Staff. Plan, Design, and Execution for Business Requirements. Plan, Design, and Execution Web and Mobile Apps. Create IT Policies & Roles. Communicate and Find Best Solution about user requirements gathered from business users. Establish cooperative relationships with vendors.',
+                'employment_type' => 'Full-time',
+                'end_month' => 11,
+                'end_year' => 2022,
+                'id' => 3,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT Bahaso Intermedia Cakrawala',
+                'published_at' => '2026-10-09 15:11:43',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 1,
+                'start_year' => 2022,
+                'status' => 'published',
+                'title' => 'IT Development Lead',
+                'updated_at' => '2026-10-09 15:11:43',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ],
+            [
+                'created_at' => '2026-10-09 15:13:41',
+                'description_markdown' => 'Manage IT Staff. Plan, Design, and Execution for Business Requirements. Plan, Design, and Execution Web and Mobile Apps. Create IT Policies & Roles.',
+                'employment_type' => 'Kontrak',
+                'end_month' => 12,
+                'end_year' => 2021,
+                'id' => 4,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT Rukun Kreasi Indonesia',
+                'published_at' => '2026-10-09 15:13:41',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 2,
+                'start_year' => 2021,
+                'status' => 'published',
+                'title' => 'IT Supervisor',
+                'updated_at' => '2026-10-09 15:13:41',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ],
+            [
+                'created_at' => '2026-10-15 08:30:19',
+                'description_markdown' => 'Manage IT Staff. Plan, Design, and Execution for Business Requirements. Plan, Design, and Execution Web and Mobile Apps. Create IT Policies & Roles. IT Plan and Services for other departments (cost and infrastructure]. Establish cooperative relationships with vendors.',
+                'employment_type' => 'Full-time',
+                'end_month' => 12,
+                'end_year' => 2020,
+                'id' => 5,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT Pantau Sumber Berita',
+                'published_at' => '2026-10-15 08:30:19',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 2,
+                'start_year' => 2018,
+                'status' => 'published',
+                'title' => 'IT Manager',
+                'updated_at' => '2026-10-15 08:30:19',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ],
+            [
+                'created_at' => '2026-10-15 08:32:20',
+                'description_markdown' => 'Analyzed data processing requirements. Planned data processing system that would provide system capabilities required for projected Workloads. Wrote, designed and produced document user requirements. Create Automation Testing base BDD (Behavior Driven Development] using behat. Create Project Architecture base BDD. Bug Fixing and Enhanced Security for Payment Gateway. Lead the other programmers to plan, design, and develop new systems.',
+                'employment_type' => 'Full-time',
+                'end_month' => 2,
+                'end_year' => 2018,
+                'id' => 6,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT Red Dot Payment',
+                'published_at' => '2026-10-15 08:32:20',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 11,
+                'start_year' => 2017,
+                'status' => 'published',
+                'title' => 'Senior Software Engineer & Lead',
+                'updated_at' => '2026-10-15 08:32:20',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ],
+            [
+                'created_at' => '2026-10-15 08:33:21',
+                'description_markdown' => 'Wrote, designed and produced document user requirements. Developed layout and installation of new system or modification of existing system. Prepared flowcharts and diagrams to illustrate the sequence of steps the program must follow and to describe logical operations involved. Developed new systems to improve production and workflow as required. Trained workers or users to use the program. Directed and coordinated work of others to write, test and modify app.',
+                'employment_type' => 'Full-time',
+                'end_month' => 8,
+                'end_year' => 2017,
+                'id' => 7,
+                'is_current' => 0,
+                'location' => 'Jakarta',
+                'organization' => 'PT GRAMEDIA MAJALAH',
+                'published_at' => '2026-10-15 08:33:21',
+                'sort_order' => 0,
+                'source_note' => NULL,
+                'source_url' => NULL,
+                'start_month' => 2,
+                'start_year' => 2002,
+                'status' => 'published',
+                'title' => 'Coordinator & Programmer',
+                'updated_at' => '2026-10-15 08:33:21',
+                'verification_status' => 'owner_confirmed',
+                'verified_at' => NULL,
+            ]
+        ];
+        
+        DB::table("experiences")->insert($dataTables);
+    }
+}
