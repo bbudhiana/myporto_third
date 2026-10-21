@@ -37,7 +37,7 @@ jobs:
           REPO_URL="https://x-access-token:${REPO_TOKEN}@github.com/bbudhiana/myporto_third.git"
           FIRST_DEPLOY_MARKER="${APP_PATH}/storage/app/.demo_seeded"
           GIT_TERMINAL_PROMPT=0
-
+ 
           if [ ! -d "${APP_PATH}" ]; then
             mkdir -p "${APP_PATH}"
           fi
