@@ -117,7 +117,7 @@ jobs:
             php artisan db:seed --class=Database\\Seeders\\Tables\\UsersSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\MediaSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProfilesSeeder --force
-            php artisan db:seed --class=Database\\Seeders\\Tables\\ExperienceSeeder --force
+            php artisan db:seed --class=Database\\Seeders\\Tables\\ExperiencesSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\SkillGroupsSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\SkillsSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProjectsSeeder --force
