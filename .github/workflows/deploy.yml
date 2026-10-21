@@ -115,6 +115,7 @@ jobs:
 
           if [ ! -f "${FIRST_DEPLOY_MARKER}" ]; then
             php artisan db:seed --class=Database\\Seeders\\Tables\\UsersSeeder --force
+            php artisan db:seed --class=Database\\Seeders\\Tables\\MediaSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProfilesSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ExperienceSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\SkillGroupsSeeder --force
@@ -122,7 +123,6 @@ jobs:
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProjectsSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProjectSkillSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\ProjectMediaSeeder --force
-            php artisan db:seed --class=Database\\Seeders\\Tables\\MediaSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\SiteSettingsSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\SocialLinksSeeder --force
 
