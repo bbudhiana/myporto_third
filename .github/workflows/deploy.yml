@@ -33,6 +33,8 @@ jobs:
           ssh -p "${SSH_PORT}" -o StrictHostKeyChecking=no "${SSH_USER}@${SSH_HOST}" "APP_ENV='${APP_ENV}' DB_DATABASE='${DB_DATABASE}' DB_USERNAME='${DB_USERNAME}' DB_PASSWORD='${DB_PASSWORD}' DB_HOST='${DB_HOST}' REPO_TOKEN='${REPO_TOKEN}' bash -s" <<'EOF'
           set -euo pipefail
 
+          export PATH=$PATH:/home/baban/.nvm/versions/node/v26.11.1/bin
+
           APP_PATH="/var/www/html/bana.indoez.com"
           REPO_URL="https://x-access-token:${REPO_TOKEN}@github.com/bbudhiana/myporto_third.git"
           FIRST_DEPLOY_MARKER="${APP_PATH}/storage/app/.demo_seeded"
