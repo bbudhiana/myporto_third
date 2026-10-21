@@ -22,7 +22,7 @@ class UsersSeeder extends Seeder
         // 1. Admin User per PRD FR-11 & 7.2
         $adminEmail = env('ADMIN_EMAIL', 'bana@bbudhiana.com');
         $adminPassword = env('ADMIN_PASSWORD', 'BanaAdmin2026!');
-
+   
         $dataTables = [
             [
                 'created_at' => '2026-10-08 16:14:26',
