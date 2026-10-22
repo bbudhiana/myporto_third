@@ -151,4 +151,110 @@ class ImageOptimizerTest extends TestCase
             );
         }
     }
+
+    public function test_a_corrupted_file_returns_null_instead_of_throwing(): void
+    {
+        Storage::fake('public');
+
+        $path = 'uploads/broken.jpg';
+        Storage::disk('public')->put($path, "\xFF\xD8 broken data \xFF\xD9");
+
+        $this->assertNull(ImageOptimizer::optimize(
+            Storage::disk('public')->path($path),
+            'public',
+            $path
+        ));
+    }
+
+    public function test_a_non_image_file_returns_null_instead_of_throwing(): void
+    {
+        Storage::fake('public');
+
+        $path = 'uploads/document.pdf';
+        Storage::disk('public')->put($path, '%PDF-1.4 pretend this is a pdf');
+
+        $this->assertNull(ImageOptimizer::optimize(
+            Storage::disk('public')->path($path),
+            'public',
+            $path
+        ));
+    }
+
+    public function test_large_images_are_downscaled_to_the_dimension_limit(): void
+    {
+        Storage::fake('public');
+
+        $path = 'uploads/huge.png';
+        $this->writeInfographicPng($path, 4000, 3000);
+
+        $optimized = ImageOptimizer::optimize(
+            Storage::disk('public')->path($path),
+            'public',
+            $path
+        );
+
+        $this->assertNotNull($optimized);
+        $this->assertLessThanOrEqual(
+            ImageOptimizer::MAX_DIMENSION,
+            max($optimized['width'], $optimized['height']),
+            'Gambar besar harus diperkecil agar hemat memori di server.'
+        );
+    }
+
+    public function test_it_replaces_a_file_owned_by_another_user(): void
+    {
+        Storage::fake('public');
+
+        $path = 'uploads/foreign.png';
+        $this->writeInfographicPng($path);
+
+        // Berkas hasil milik "user lain" dan hanya bisa dibaca.
+        $target = Storage::disk('public')->path('uploads/foreign.webp');
+        file_put_contents($target, 'old content');
+        chmod($target, 0444);
+
+        $optimized = ImageOptimizer::optimize(
+            Storage::disk('public')->path($path),
+            'public',
+            $path
+        );
+
+        $this->assertNotNull($optimized, 'Berkas milik user lain harus tetap bisa diganti.');
+        $this->assertSame('uploads/foreign.webp', $optimized['path']);
+        $this->assertNotSame('old content', Storage::disk('public')->get('uploads/foreign.webp'));
+        $this->assertFalse(
+            Storage::disk('public')->exists('uploads/foreign.webp.tmp'),
+            'Berkas sementara harus dibersihkan.'
+        );
+    }
+
+    public function test_it_returns_null_when_gd_is_unavailable(): void
+    {
+        // Simulasikan PHP tanpa GD: jalankan subprocess dengan disable_functions.
+        $script = <<<'PHP'
+require getcwd().'/vendor/autoload.php';
+$app = require_once getcwd().'/bootstrap/app.php';
+$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+$missing = App\Support\ImageOptimizer::missingFunctions();
+$result = App\Support\ImageOptimizer::optimize('/tmp/does-not-matter.jpg');
+echo json_encode(['missing' => $missing, 'result' => $result]);
+PHP;
+
+        $command = sprintf(
+            'php -d disable_functions=imagewebp,imagecreatefromjpeg,imagecreatefrompng,imagerotate,imageflip -r %s',
+            escapeshellarg($script)
+        );
+
+        $output = shell_exec($command.' 2>&1');
+
+        $this->assertIsString($output, 'Subprocess harus mengembalikan output.');
+        $this->assertStringNotContainsString('Fatal error', $output, 'Tanpa GD, kode tidak boleh fatal.');
+        $this->assertStringNotContainsString('undefined function', $output, 'Fungsi GD tidak boleh dipanggil tanpa guard.');
+
+        $decoded = json_decode(trim($output), true);
+
+        $this->assertIsArray($decoded, 'Output harus JSON: '.$output);
+        $this->assertNotEmpty($decoded['missing'], 'Fungsi GD yang dimatikan harus terdeteksi.');
+        $this->assertNull($decoded['result'], 'Optimasi harus dilewati, bukan error.');
+    }
 }

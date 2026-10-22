@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,13 +17,11 @@ class SiteSettingsSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
-            
+
         ];
-        
-        DB::table("site_settings")->insert($dataTables);
+
+        DB::table('site_settings')->insertOrIgnore($dataTables);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Profile;
 use App\Models\Project;
 use App\Models\SkillGroup;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -78,6 +79,20 @@ class PublicPagesTest extends TestCase
             ->has('submissionToken')
             ->where('profile.displayName', 'Bana Budhiana')
         );
+    }
+
+    public function test_public_pages_still_render_when_the_cache_store_is_broken(): void
+    {
+        // Cache store 'file' menulis ke storage/. Bila folder itu tidak writable
+        // (mis. izin salah di server), setiap request akan 500. Karena itu
+        // halaman publik tidak boleh bergantung pada cache sama sekali.
+        foreach (['get', 'put', 'remember', 'has', 'many', 'forever'] as $method) {
+            Cache::shouldReceive($method)->andThrow(new \RuntimeException('cache store tidak bisa ditulis'));
+        }
+
+        $this->get('/')->assertStatus(200);
+        $this->get('/projects')->assertStatus(200);
+        $this->get('/privacy')->assertStatus(200);
     }
 
     public function test_projects_index_can_be_rendered_and_filtered(): void

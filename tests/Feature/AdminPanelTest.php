@@ -3,16 +3,17 @@
 namespace Tests\Feature;
 
 use App\Models\ContactMessage;
-use App\Models\ContentRevision;
 use App\Models\Experience;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
+use Mockery;
 use Tests\TestCase;
 
 class AdminPanelTest extends TestCase
@@ -170,6 +171,37 @@ class AdminPanelTest extends TestCase
             'mime_type' => 'application/pdf',
             'original_name' => 'cv.pdf',
         ]);
+    }
+
+    public function test_media_upload_reports_a_friendly_error_when_storage_is_not_writable(): void
+    {
+        $disk = Mockery::mock(Filesystem::class);
+        $disk->shouldReceive('putFileAs')->andReturn(false);
+        $disk->shouldReceive('exists')->andReturn(false);
+        Storage::shouldReceive('disk')->with('public')->andReturn($disk);
+
+        $response = $this->actingAs($this->admin)->post('/admin/media/upload', [
+            'file' => UploadedFile::fake()->create('photo.jpg', 500, 'image/jpeg'),
+        ]);
+
+        $response->assertSessionHasErrors('file');
+        $response->assertStatus(302);
+        $this->assertDatabaseCount('media', 0);
+    }
+
+    public function test_media_upload_reports_a_friendly_error_when_storage_throws(): void
+    {
+        $disk = Mockery::mock(Filesystem::class);
+        $disk->shouldReceive('putFileAs')->andThrow(new \RuntimeException('Permission denied'));
+        Storage::shouldReceive('disk')->with('public')->andReturn($disk);
+
+        $response = $this->actingAs($this->admin)->post('/admin/media/upload', [
+            'file' => UploadedFile::fake()->create('photo.jpg', 500, 'image/jpeg'),
+        ]);
+
+        $response->assertSessionHasErrors('file');
+        $response->assertStatus(302);
+        $this->assertDatabaseCount('media', 0);
     }
 
     public function test_media_cannot_be_deleted_if_used_in_profile_or_project(): void

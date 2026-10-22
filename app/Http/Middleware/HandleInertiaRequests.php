@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -44,11 +43,9 @@ class HandleInertiaRequests extends Middleware
             'site' => fn () => [
                 'name' => config('app.name'),
                 'url' => rtrim((string) config('app.url'), '/'),
-                'location' => Cache::remember(
-                    'site.location',
-                    now()->addMinutes(10),
-                    fn () => Profile::published()->value('location')
-                ),
+                // Sengaja tanpa cache: cache store 'file' menulis ke storage/,
+                // dan bila folder itu tidak writable setiap request akan 500.
+                'location' => Profile::published()->value('location'),
             ],
         ];
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,13 +17,11 @@ class CacheLocksSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --mode=table --all-tables
-         *
          */
-
         $dataTables = [
-            
+
         ];
-        
-        DB::table("cache_locks")->insert($dataTables);
+
+        DB::table('cache_locks')->insertOrIgnore($dataTables);
     }
 }

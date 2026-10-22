@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,9 +17,7 @@ class SocialLinksSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
             [
                 'created_at' => '2026-10-08 16:14:26',
@@ -37,9 +36,9 @@ class SocialLinksSeeder extends Seeder
                 'sort_order' => 2,
                 'updated_at' => '2026-10-08 16:14:26',
                 'url' => 'https://linkedin.com',
-            ]
+            ],
         ];
-        
-        DB::table("social_links")->insert($dataTables);
+
+        DB::table('social_links')->insertOrIgnore($dataTables);
     }
 }

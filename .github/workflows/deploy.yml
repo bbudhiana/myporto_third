@@ -29,9 +29,12 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
-          ssh -p "${SSH_PORT}" -o StrictHostKeyChecking=no "${SSH_USER}@${SSH_HOST}" "APP_ENV='${APP_ENV}' DB_DATABASE='${DB_DATABASE}' DB_USERNAME='${DB_USERNAME}' DB_PASSWORD='${DB_PASSWORD}' DB_HOST='${DB_HOST}' REPO_TOKEN='${REPO_TOKEN}' bash -s" <<'EOF'
+          ssh -p "${SSH_PORT}" -o StrictHostKeyChecking=no "${SSH_USER}@${SSH_HOST}" "APP_ENV='${APP_ENV}' DB_DATABASE='${DB_DATABASE}' DB_USERNAME='${DB_USERNAME}' DB_PASSWORD='${DB_PASSWORD}' DB_HOST='${DB_HOST}' REPO_TOKEN='${REPO_TOKEN}' ADMIN_EMAIL='${ADMIN_EMAIL}' ADMIN_PASSWORD='${ADMIN_PASSWORD}' bash -s" <<'EOF'
           set -euo pipefail
+          umask 0002
 
           export PATH=$PATH:/home/baban/.nvm/versions/node/v26.11.1/bin
 
@@ -39,7 +42,31 @@ jobs:
           REPO_URL="https://x-access-token:${REPO_TOKEN}@github.com/bbudhiana/myporto_third.git"
           FIRST_DEPLOY_MARKER="${APP_PATH}/storage/app/.demo_seeded"
           GIT_TERMINAL_PROMPT=0
- 
+
+          # User proses PHP (FrankenPHP) yang harus bisa menulis ke storage/.
+          PHP_WORKER_USER="$(ps -eo user,comm | awk '/frankenphp/ && !/awk/ {print $1; exit}')"
+          PHP_WORKER_USER="${PHP_WORKER_USER:-caddy}"
+
+          ensure_storage_writable() {
+            mkdir -p "${APP_PATH}/storage/app/public/uploads" "${APP_PATH}/storage/framework/cache/data" \
+                     "${APP_PATH}/storage/framework/views" "${APP_PATH}/storage/framework/sessions" \
+                     "${APP_PATH}/storage/framework/cache/locks" "${APP_PATH}/storage/logs" \
+                     "${APP_PATH}/bootstrap/cache"
+            # chgrp tanpa sudo: user deploy (baban) adalah anggota group caddy.
+            chgrp -R "${PHP_WORKER_USER}" "${APP_PATH}/storage" "${APP_PATH}/bootstrap/cache" 2>/dev/null || true
+            chmod -R g+rwX "${APP_PATH}/storage" "${APP_PATH}/bootstrap/cache" 2>/dev/null || true
+            find "${APP_PATH}/storage" "${APP_PATH}/bootstrap/cache" -type d -exec chmod g+s {} + 2>/dev/null || true
+          }
+
+          ensure_storage_writable
+
+          if sudo -n -u "${PHP_WORKER_USER}" test -w "${APP_PATH}/storage/app/public/uploads" 2>/dev/null; then
+            echo "OK: worker PHP (${PHP_WORKER_USER}) bisa menulis ke storage"
+          else
+            echo "PERINGATAN: worker PHP (${PHP_WORKER_USER}) belum bisa menulis ke storage."
+            echo "Jalankan manual: sudo chgrp -R ${PHP_WORKER_USER} ${APP_PATH}/storage ${APP_PATH}/bootstrap/cache"
+          fi
+
           if [ ! -d "${APP_PATH}" ]; then
             mkdir -p "${APP_PATH}"
           fi
@@ -60,9 +87,13 @@ jobs:
 
           if [ ! -f .env ]; then
             cp .env.example .env
+            # APP_KEY harus unik per server, jangan memakai nilai dari repo.
+            php artisan key:generate --force
           fi
 
           php artisan down || true
+          # Selalu lifting maintenance mode, walau script gagal di tengah.
+          trap 'php artisan up || true' EXIT
 
           php -r '
           $path = ".env";
@@ -80,6 +111,13 @@ jobs:
               "QUEUE_CONNECTION" => "database",
               "SESSION_DRIVER" => "database",
           ];
+
+          // Kredensial admin hanya ditulis bila secret GitHub tersedia.
+          foreach (["ADMIN_EMAIL" => getenv("ADMIN_EMAIL"), "ADMIN_PASSWORD" => getenv("ADMIN_PASSWORD")] as $key => $value) {
+              if (! empty($value)) {
+                  $values[$key] = $value;
+              }
+          }
 
           $lines = file_exists($path) ? file($path, FILE_IGNORE_NEW_LINES) : [];
           $map = [];
@@ -113,6 +151,9 @@ jobs:
           php artisan route:cache
           php artisan view:cache
 
+          # Berkas hasil deploy (compiled view, cache) harus tetap group-writable.
+          ensure_storage_writable
+
           if [ ! -f "${FIRST_DEPLOY_MARKER}" ]; then
             php artisan db:seed --class=Database\\Seeders\\Tables\\UsersSeeder --force
             php artisan db:seed --class=Database\\Seeders\\Tables\\MediaSeeder --force
@@ -132,6 +173,5 @@ jobs:
 
           php artisan queue:restart || true
           php artisan up || true
-          npm run build
           /home/baban/restart_caddy_services.sh
           EOF

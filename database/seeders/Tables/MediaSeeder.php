@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,23 +17,21 @@ class MediaSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
             [
                 'alt_text' => 'My Latest CV',
                 'bytes' => 279725,
                 'created_at' => '2026-10-09 09:22:21',
                 'disk' => 'public',
-                'height' => NULL,
+                'height' => null,
                 'id' => 1,
                 'mime_type' => 'application/pdf',
                 'original_name' => 'Software and AI Optimation Engineer - Classic.pdf',
                 'path' => 'uploads/YWknkAUe0LVjyFMTKhYFcAkP5Sxf7t8v90nWWV2e.pdf',
                 'updated_at' => '2026-10-09 09:22:21',
                 'visibility' => 'public',
-                'width' => NULL,
+                'width' => null,
             ],
             [
                 'alt_text' => 'My Latest Photo Profile',
@@ -117,9 +116,9 @@ class MediaSeeder extends Seeder
                 'updated_at' => '2026-10-15 09:02:33',
                 'visibility' => 'public',
                 'width' => 1536,
-            ]
+            ],
         ];
-        
-        DB::table("media")->insert($dataTables);
+
+        DB::table('media')->insertOrIgnore($dataTables);
     }
 }

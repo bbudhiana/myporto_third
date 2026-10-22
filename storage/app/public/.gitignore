@@ -1,2 +1,5 @@
 *
 !.gitignore
+# Media hasil unggah ikut repo supaya deploy selalu punya gambar & CV.
+!uploads/
+!uploads/*

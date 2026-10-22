@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,25 +17,23 @@ class ExperiencesSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
             [
                 'created_at' => '2026-10-08 16:14:26',
                 'description_markdown' => 'Mengembangkan perangkat lunak dan integrasi AI dengan menerjemahkan kebutuhan bisnis menjadi solusi teknis yang terstruktur, andal, dan mudah dipelihara. Lingkup peran mencakup perancangan arsitektur aplikasi, pengembangan layanan backend dan antarmuka pengguna, serta integrasi model AI ke dalam alur kerja yang relevan. Pendekatan engineering menekankan kualitas kode, keamanan data, pengujian, dan evaluasi keluaran AI agar solusi dapat digunakan secara bertanggung jawab dalam konteks operasional.',
                 'employment_type' => 'Freelance',
-                'end_month' => NULL,
-                'end_year' => NULL,
+                'end_month' => null,
+                'end_year' => null,
                 'id' => 1,
                 'is_current' => 1,
                 'location' => 'Tangerang dan Jakarta',
                 'organization' => 'Independen',
                 'published_at' => '2026-10-08 16:14:26',
                 'sort_order' => 1,
-                'source_note' => NULL,
-                'source_url' => NULL,
-                'start_month' => NULL,
+                'source_note' => null,
+                'source_url' => null,
+                'start_month' => null,
                 'start_year' => 2026,
                 'status' => 'published',
                 'title' => 'Senior Software and AI Engineer',
@@ -54,15 +53,15 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT Bahaso Intermedia Cakrawala',
                 'published_at' => '2026-10-09 15:04:52',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 11,
                 'start_year' => 2022,
                 'status' => 'published',
                 'title' => 'Deputy CTO',
                 'updated_at' => '2026-10-09 16:51:24',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
+                'verified_at' => null,
             ],
             [
                 'created_at' => '2026-10-09 15:11:43',
@@ -76,15 +75,15 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT Bahaso Intermedia Cakrawala',
                 'published_at' => '2026-10-09 15:11:43',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 1,
                 'start_year' => 2022,
                 'status' => 'published',
                 'title' => 'IT Development Lead',
                 'updated_at' => '2026-10-09 15:11:43',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
+                'verified_at' => null,
             ],
             [
                 'created_at' => '2026-10-09 15:13:41',
@@ -98,15 +97,15 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT Rukun Kreasi Indonesia',
                 'published_at' => '2026-10-09 15:13:41',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 2,
                 'start_year' => 2021,
                 'status' => 'published',
                 'title' => 'IT Supervisor',
                 'updated_at' => '2026-10-09 15:13:41',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
+                'verified_at' => null,
             ],
             [
                 'created_at' => '2026-10-15 08:30:19',
@@ -120,15 +119,15 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT Pantau Sumber Berita',
                 'published_at' => '2026-10-15 08:30:19',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 2,
                 'start_year' => 2018,
                 'status' => 'published',
                 'title' => 'IT Manager',
                 'updated_at' => '2026-10-15 08:30:19',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
+                'verified_at' => null,
             ],
             [
                 'created_at' => '2026-10-15 08:32:20',
@@ -142,15 +141,15 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT Red Dot Payment',
                 'published_at' => '2026-10-15 08:32:20',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 11,
                 'start_year' => 2017,
                 'status' => 'published',
                 'title' => 'Senior Software Engineer & Lead',
                 'updated_at' => '2026-10-15 08:32:20',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
+                'verified_at' => null,
             ],
             [
                 'created_at' => '2026-10-15 08:33:21',
@@ -164,18 +163,18 @@ class ExperiencesSeeder extends Seeder
                 'organization' => 'PT GRAMEDIA MAJALAH',
                 'published_at' => '2026-10-15 08:33:21',
                 'sort_order' => 0,
-                'source_note' => NULL,
-                'source_url' => NULL,
+                'source_note' => null,
+                'source_url' => null,
                 'start_month' => 2,
                 'start_year' => 2002,
                 'status' => 'published',
                 'title' => 'Coordinator & Programmer',
                 'updated_at' => '2026-10-15 08:33:21',
                 'verification_status' => 'owner_confirmed',
-                'verified_at' => NULL,
-            ]
+                'verified_at' => null,
+            ],
         ];
-        
-        DB::table("experiences")->insert($dataTables);
+
+        DB::table('experiences')->insertOrIgnore($dataTables);
     }
 }

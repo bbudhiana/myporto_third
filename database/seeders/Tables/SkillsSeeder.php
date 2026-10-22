@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,12 +17,10 @@ class SkillsSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 1,
                 'name' => 'Clean Architecture & Domain Design',
@@ -30,7 +29,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 2,
                 'name' => 'RESTful & GraphQL API Design',
@@ -39,7 +38,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 3,
                 'name' => 'Type-Safe Frontend Development',
@@ -48,7 +47,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 4,
                 'name' => 'Automated Testing (Unit & Feature]',
@@ -57,7 +56,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 5,
                 'name' => 'LLM Evaluation & Integration',
@@ -66,7 +65,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 6,
                 'name' => 'RAG Pipeline Architecture',
@@ -75,7 +74,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 7,
                 'name' => 'Prompt Engineering & Constraints',
@@ -84,7 +83,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 8,
                 'name' => 'Safety & Data Observability',
@@ -93,7 +92,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 9,
                 'name' => 'Modular Monoliths & Microservices',
@@ -102,7 +101,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 10,
                 'name' => 'CI/CD Automation Pipelines',
@@ -111,7 +110,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 11,
                 'name' => 'Database Optimization & Indexing',
@@ -120,7 +119,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 12,
                 'name' => 'Code Review & Quality Standards',
@@ -129,7 +128,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 13,
                 'name' => 'Relational Databases (MariaDB, PostgreSQL]',
@@ -138,7 +137,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 14,
                 'name' => 'Containerization (Docker]',
@@ -147,7 +146,7 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 15,
                 'name' => 'Caching & Queue Management',
@@ -156,16 +155,16 @@ class SkillsSeeder extends Seeder
                 'updated_at' => '2026-10-08 16:14:26',
             ],
             [
-                'context' => NULL,
+                'context' => null,
                 'created_at' => '2026-10-08 16:14:26',
                 'id' => 16,
                 'name' => 'Security & Role-based Access',
                 'skill_group_id' => 4,
                 'sort_order' => 4,
                 'updated_at' => '2026-10-08 16:14:26',
-            ]
+            ],
         ];
-        
-        DB::table("skills")->insert($dataTables);
+
+        DB::table('skills')->insertOrIgnore($dataTables);
     }
 }

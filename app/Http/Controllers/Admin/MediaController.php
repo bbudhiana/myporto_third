@@ -51,7 +51,25 @@ class MediaController extends Controller
         // Generate randomized safe storage name per PRD 7 & 12
         $extension = $file->getClientOriginalExtension();
         $randomName = Str::random(40).'.'.$extension;
-        $path = $file->storeAs('uploads', $randomName, 'public');
+
+        try {
+            $path = $file->storeAs('uploads', $randomName, 'public');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->withErrors([
+                'file' => 'Gagal menyimpan berkas. Periksa izin folder penyimpanan di server.',
+            ]);
+        }
+
+        // Disk 'public' memakai throw => false, jadi penulisan yang gagal
+        // tidak melempar error. Pastikan berkasnya benar-benar ada sebelum
+        // membuat baris media (kalau tidak, DB akan mencatat berkas palsu).
+        if (! is_string($path) || ! Storage::disk('public')->exists($path)) {
+            return back()->withErrors([
+                'file' => 'Gagal menyimpan berkas. Periksa izin folder penyimpanan di server.',
+            ]);
+        }
 
         [$width, $height] = str_starts_with($mime, 'image/')
             ? @getimagesize($file->getRealPath()) ?: [null, null]

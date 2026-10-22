@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -17,13 +18,13 @@ class UsersSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
 
         // 1. Admin User per PRD FR-11 & 7.2
-        $adminEmail = env('ADMIN_EMAIL', 'bana@bbudhiana.com');
-        $adminPassword = env('ADMIN_PASSWORD', 'BanaAdmin2026!');
-   
+        // config(), bukan env(): env() selalu null setelah config:cache.
+        $adminEmail = config('portfolio.admin_email');
+        $adminPassword = config('portfolio.admin_password');
+
         $dataTables = [
             [
                 'created_at' => '2026-10-08 16:14:26',
@@ -32,11 +33,10 @@ class UsersSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Bana Budhiana',
                 'password' => Hash::make($adminPassword),
-                'remember_token' => 'ohDcpXCobd6P4iZdpmNGbl6UzBlPBHvhz0mGdd3XUjOMqsH1nsge0mafV9LS',
                 'updated_at' => '2026-10-08 16:14:26',
-            ]
+            ],
         ];
-        
-        DB::table("users")->insert($dataTables);
+
+        DB::table('users')->insertOrIgnore($dataTables);
     }
 }

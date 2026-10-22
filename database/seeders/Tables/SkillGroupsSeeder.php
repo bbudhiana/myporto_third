@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders\Tables;
 
 use Illuminate\Database\Seeder;
@@ -16,9 +17,7 @@ class SkillGroupsSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --table-mode --tables=users,social_links,skill_groups,skills,site_settings,projects,project_skill,project_media,profiles,media,experiences,contact_messages
-         *
          */
-
         $dataTables = [
             [
                 'created_at' => '2026-10-08 16:14:26',
@@ -51,9 +50,9 @@ class SkillGroupsSeeder extends Seeder
                 'name' => 'Data & Infrastructure',
                 'sort_order' => 4,
                 'updated_at' => '2026-10-08 16:14:26',
-            ]
+            ],
         ];
-        
-        DB::table("skill_groups")->insert($dataTables);
+
+        DB::table('skill_groups')->insertOrIgnore($dataTables);
     }
 }
