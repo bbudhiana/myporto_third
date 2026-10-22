@@ -4,8 +4,11 @@ export interface ProfileDTO {
     heroSummary: string;
     aboutMarkdown: string;
     location: string | null;
+    publicEmail?: string | null;
     hasResume: boolean;
     portraitUrl: string | null;
+    portraitWidth?: number | null;
+    portraitHeight?: number | null;
 }
 
 export interface ExperienceDTO {
@@ -45,6 +48,8 @@ export interface ProjectCardDTO {
     roleSummary: string;
     featured?: boolean;
     coverUrl: string | null;
+    coverWidth?: number | null;
+    coverHeight?: number | null;
     skills: string[];
 }
 
@@ -60,6 +65,8 @@ export interface ProjectDetailDTO extends ProjectCardDTO {
         url: string;
         altText: string | null;
         caption: string | null;
+        width?: number | null;
+        height?: number | null;
     }>;
 }
 

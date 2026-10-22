@@ -1,10 +1,12 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import Card from '@/Components/UI/Card';
 import Badge from '@/Components/UI/Badge';
 
 export default function Privacy() {
+    const { site } = usePage().props as { site?: { url?: string } };
+
     return (
         <PublicLayout>
             <Head>
@@ -13,7 +15,7 @@ export default function Privacy() {
                     name="description"
                     content="Kebijakan privasi dan ketentuan pemrosesan data pesan kontak pada portofolio profesional Bana Budhiana."
                 />
-                <link rel="canonical" href="http://localhost:9007/privacy" />
+                <link rel="canonical" href={`${site?.url ?? ''}/privacy`} />
             </Head>
 
             <section className="py-12 sm:py-16">

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import Card from '@/Components/UI/Card';
 import Badge from '@/Components/UI/Badge';
 import Button from '@/Components/UI/Button';
+import ProjectCard from '@/Components/Portfolio/ProjectCard';
 import { PaginatedData, ProjectCardDTO } from '@/types/portfolio';
 
 interface Props {
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export default function ProjectsIndex({ projects, categories, selectedCategory }: Props) {
+    const { site } = usePage().props as { site?: { url?: string } };
+
     const handleCategoryClick = (category: string | null) => {
         router.get(
             '/projects',
@@ -29,7 +32,7 @@ export default function ProjectsIndex({ projects, categories, selectedCategory }
                     name="description"
                     content="Kumpulan studi kasus, keputusan arsitektur teknis, dan portofolio rekayasa perangkat lunak serta solusi AI oleh Bana Budhiana."
                 />
-                <link rel="canonical" href="http://localhost:9007/projects" />
+                <link rel="canonical" href={`${site?.url ?? ''}/projects`} />
             </Head>
 
             <section className="py-12 sm:py-16 border-b border-[#DDE5EA]">
@@ -97,65 +100,12 @@ export default function ProjectsIndex({ projects, categories, selectedCategory }
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {projects.data.map((project) => (
-                                <Link
+                                <ProjectCard
                                     key={project.id}
-                                    href={`/projects/${project.slug}`}
-                                    className="group block focus-visible:outline-2 focus-visible:outline-[#1D4ED8] rounded-2xl"
-                                >
-                                    <Card hoverEffect className="h-full flex flex-col justify-between">
-                                        <div className="space-y-4">
-                                            {project.coverUrl ? (
-                                                <img
-                                                    src={project.coverUrl}
-                                                    alt={project.title}
-                                                    className="w-full h-48 object-cover rounded-xl border border-[#DDE5EA]"
-                                                    loading="lazy"
-                                                />
-                                            ) : (
-                                                <div className="h-48 rounded-xl bg-[#F0F7F6] border border-[#DDE5EA] flex items-center justify-center p-6 text-center group-hover:bg-[#E3F3EF] transition-colors">
-                                                    <span className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
-                                                        {project.category}
-                                                    </span>
-                                                </div>
-                                            )}
-
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-2">
-                                                    <Badge variant="neutral">{project.category}</Badge>
-                                                    {project.featured && (
-                                                        <Badge variant="accent">Unggulan</Badge>
-                                                    )}
-                                                </div>
-                                                <h3 className="text-lg font-bold text-[#172B3A] group-hover:text-[#0F766E] transition-colors">
-                                                    {project.title}
-                                                </h3>
-                                                <p className="text-sm text-[#475569] line-clamp-3">
-                                                    {project.excerpt}
-                                                </p>
-                                            </div>
-
-                                            {project.skills.length > 0 && (
-                                                <div className="flex flex-wrap gap-1.5 pt-2">
-                                                    {project.skills.slice(0, 4).map((skill, idx) => (
-                                                        <span
-                                                            key={idx}
-                                                            className="text-xs px-2.5 py-0.5 rounded-md bg-[#F0F7F6] text-[#475569] font-medium"
-                                                        >
-                                                            {skill}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="mt-6 pt-4 border-t border-[#DDE5EA] flex items-center justify-between text-xs text-[#475569]">
-                                            <span>Peran: {project.roleSummary}</span>
-                                            <span className="text-[#0F766E] font-medium group-hover:underline">
-                                                Baca Studi Kasus →
-                                            </span>
-                                        </div>
-                                    </Card>
-                                </Link>
+                                    project={project}
+                                    showFeaturedBadge
+                                    skillLimit={4}
+                                />
                             ))}
                         </div>
                     )}

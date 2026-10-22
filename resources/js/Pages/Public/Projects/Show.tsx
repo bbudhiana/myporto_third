@@ -1,9 +1,10 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import Card from '@/Components/UI/Card';
 import Badge from '@/Components/UI/Badge';
 import Button from '@/Components/UI/Button';
+import SectionHeading from '@/Components/UI/SectionHeading';
 import { ProjectDetailDTO } from '@/types/portfolio';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function ProjectShow({ project }: Props) {
+    const { site } = usePage().props as { site?: { url?: string } };
     const pageTitle = `${project.title} | Studi Kasus Bana Budhiana`;
 
     return (
@@ -21,7 +23,7 @@ export default function ProjectShow({ project }: Props) {
                 <meta property="og:title" content={pageTitle} />
                 <meta property="og:description" content={project.excerpt} />
                 <meta property="og:type" content="article" />
-                <link rel="canonical" href={`http://localhost:9007/projects/${project.slug}`} />
+                <link rel="canonical" href={`${site?.url ?? ''}/projects/${project.slug}`} />
             </Head>
 
             {/* Header & Meta */}
@@ -105,22 +107,16 @@ export default function ProjectShow({ project }: Props) {
                     <div className="space-y-10 pt-6">
                         {/* 1. Problem Statement */}
                         <section className="space-y-3">
-                            <h2 className="text-xl sm:text-2xl font-bold text-[#172B3A] flex items-center gap-2">
-                                <span className="w-2 h-6 bg-[#0F766E] rounded-full inline-block" />
-                                Konteks & Masalah
-                            </h2>
-                            <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA]">
+                            <SectionHeading variant="bar" title="Konteks & Masalah" />
+                            <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA] max-w-[68ch]">
                                 {project.problemMarkdown}
                             </div>
                         </section>
 
                         {/* 2. Solution & Technical Approach */}
                         <section className="space-y-3">
-                            <h2 className="text-xl sm:text-2xl font-bold text-[#172B3A] flex items-center gap-2">
-                                <span className="w-2 h-6 bg-[#0F766E] rounded-full inline-block" />
-                                Pendekatan & Solusi Teknis
-                            </h2>
-                            <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA]">
+                            <SectionHeading variant="bar" title="Pendekatan & Solusi Teknis" />
+                            <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA] max-w-[68ch]">
                                 {project.solutionMarkdown}
                             </div>
                         </section>
@@ -128,11 +124,8 @@ export default function ProjectShow({ project }: Props) {
                         {/* 3. Trade-offs & Engineering Decisions */}
                         {project.tradeoffsMarkdown && (
                             <section className="space-y-3">
-                                <h2 className="text-xl sm:text-2xl font-bold text-[#172B3A] flex items-center gap-2">
-                                    <span className="w-2 h-6 bg-[#0F766E] rounded-full inline-block" />
-                                    Trade-off & Keputusan Rekayasa
-                                </h2>
-                                <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA]">
+                                <SectionHeading variant="bar" title="Trade-off & Keputusan Rekayasa" />
+                                <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA] max-w-[68ch]">
                                     {project.tradeoffsMarkdown}
                                 </div>
                             </section>
@@ -141,11 +134,8 @@ export default function ProjectShow({ project }: Props) {
                         {/* 4. Outcomes & Results */}
                         {project.outcomesMarkdown && (
                             <section className="space-y-3">
-                                <h2 className="text-xl sm:text-2xl font-bold text-[#172B3A] flex items-center gap-2">
-                                <span className="w-2 h-6 bg-[#0F766E] rounded-full inline-block" />
-                                Hasil & Dampak Sistem
-                                </h2>
-                                <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA]">
+                                <SectionHeading variant="bar" title="Hasil & Dampak Sistem" />
+                                <div className="text-base text-[#475569] leading-relaxed whitespace-pre-line pl-4 border-l-2 border-[#DDE5EA] max-w-[68ch]">
                                     {project.outcomesMarkdown}
                                 </div>
                             </section>
@@ -159,21 +149,31 @@ export default function ProjectShow({ project }: Props) {
                                 Lampiran & Dokumentasi Visual
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {project.media.map((item) => (
-                                    <div key={item.id} className="rounded-xl border border-[#DDE5EA] overflow-hidden bg-white">
-                                        <img
-                                            src={item.url}
-                                            alt={item.altText || project.title}
-                                            className="w-full h-48 object-cover"
-                                            loading="lazy"
-                                        />
+                                {project.media.map((item) => {
+                                    const ratio = item.width && item.height ? item.width / item.height : 1.6;
+                                    const frameClass = ratio < 1 ? 'aspect-[4/5]' : 'aspect-[16/10]';
+
+                                    return (
+                                    <figure key={item.id} className="rounded-xl border border-[#DDE5EA] overflow-hidden bg-white">
+                                        <div className={`${frameClass} w-full bg-[#F0F7F6] border-b border-[#DDE5EA]`}>
+                                            <img
+                                                src={item.url}
+                                                alt={item.altText || project.title}
+                                                width={item.width ?? undefined}
+                                                height={item.height ?? undefined}
+                                                className="h-full w-full object-contain p-2"
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        </div>
                                         {item.caption && (
-                                            <p className="p-3 text-xs text-[#475569] border-t border-[#DDE5EA]">
+                                            <figcaption className="p-3 text-xs text-[#475569] border-t border-[#DDE5EA]">
                                                 {item.caption}
-                                            </p>
+                                            </figcaption>
                                         )}
-                                    </div>
-                                ))}
+                                    </figure>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}

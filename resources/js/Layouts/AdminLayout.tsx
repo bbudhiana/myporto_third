@@ -9,6 +9,7 @@ interface Props {
 
 export default function AdminLayout({ title, children }: Props) {
     const { flash, unreadMessagesCount } = usePage().props as any;
+    const currentPath = usePage().url.split('?')[0];
 
     const navItems = [
         { label: 'Ringkasan', href: '/admin' },
@@ -23,8 +24,6 @@ export default function AdminLayout({ title, children }: Props) {
             badge: unreadMessagesCount ? `${unreadMessagesCount}` : undefined,
         },
     ];
-
-    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
     return (
         <div className="min-h-screen bg-[#F8FAFC] text-[#172B3A] flex flex-col md:flex-row">

@@ -33,7 +33,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Jangan dilayani lewat /storage: disk ini privat, dan ikutnya
+            // akan memblokir route publik media (lihat routes/web.php).
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],
@@ -43,6 +45,7 @@ return [
             'root' => storage_path('app/public'),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

@@ -1,9 +1,11 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import Button from '@/Components/UI/Button';
 import Card from '@/Components/UI/Card';
 import Badge from '@/Components/UI/Badge';
+import SectionHeading from '@/Components/UI/SectionHeading';
+import ProjectCard from '@/Components/Portfolio/ProjectCard';
 import {
     ExperienceDTO,
     ProfileDTO,
@@ -30,11 +32,23 @@ export default function Home({
     socialLinks,
     submissionToken,
 }: Props) {
+    const { site } = usePage().props as { site?: { url?: string } };
     const displayName = profile?.displayName || 'Bana Budhiana';
     const headline = profile?.headline || 'Senior Software and AI Engineer';
     const heroSummary =
         profile?.heroSummary ||
         'Merancang perangkat lunak dan solusi AI dengan fokus pada kebutuhan bisnis, keandalan sistem, dan kemudahan pengembangan.';
+
+    // Data nyata dari props — tidak ada angka rekaan.
+    const currentRole = experiences.find((exp) => exp.isCurrent);
+    const currentRoleLabel = currentRole
+        ? [currentRole.employmentType, currentRole.organization].filter(Boolean).join(' · ')
+        : null;
+    const proofStats = [
+        { label: 'Studi Kasus', value: featuredProjects.length },
+        { label: 'Kelompok Kompetensi', value: skillGroups.length },
+        { label: 'Rekam Jejak', value: experiences.length },
+    ];
 
     // Structured Data JSON-LD per PRD 11.2
     const structuredData = {
@@ -43,7 +57,7 @@ export default function Home({
         name: displayName,
         jobTitle: headline,
         description: heroSummary,
-        url: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:9007',
+        url: site?.url ?? (typeof window !== 'undefined' ? window.location.origin : ''),
         sameAs: socialLinks.map((s) => s.url),
     };
 
@@ -55,27 +69,38 @@ export default function Home({
                 <meta property="og:title" content={`${displayName} | ${headline}`} />
                 <meta property="og:description" content={heroSummary} />
                 <meta property="og:type" content="profile" />
+                <link rel="canonical" href={`${site?.url ?? ''}/`} />
                 <script type="application/ld+json">
                     {JSON.stringify(structuredData)}
                 </script>
             </Head>
 
             {/* Hero Section per PRD 5.1 & 6.3 */}
-            <section className="py-16 sm:py-24 border-b border-[#DDE5EA] bg-gradient-to-tr from-[#F0F7F6]/10 to-[#E3F3EF]/10">
-                <div className="max-w-6xl mx-auto px-5 sm:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                        <div className="lg:col-span-7 space-y-6">
-                            <div className="inline-flex items-center gap-2">
-                                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#0F766E]/10"><span className="text-[0F766E]">*</span><span className="text-xs font-medium text-[#0F766E] uppercase tracking-wider">Portofolio Profesional</span></div>
+            <section className="relative overflow-hidden border-b border-[#DDE5EA] bg-gradient-to-tr from-[#F0F7F6]/70 via-[#F8FAFC] to-[#E3F3EF]/60">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#0F766E]/10 blur-3xl"
+                />
+                <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                        <div className="lg:col-span-7 space-y-7">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#0F766E] ring-1 ring-[#0F766E]/20">
+                                    <span className="relative flex h-2 w-2" aria-hidden="true">
+                                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0F766E] opacity-60 motion-reduce:animate-none" />
+                                        <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0F766E]" />
+                                    </span>
+                                    {currentRoleLabel ? `Aktif · ${currentRoleLabel}` : 'Portofolio Profesional'}
+                                </span>
                                 {profile?.location && (
-                                    <span className="text-xs text-[#475569] font-medium">
+                                    <span className="text-xs font-medium text-[#475569]">
                                         {profile.location}
                                     </span>
                                 )}
                             </div>
 
-                            <div className="space-y-3">
-                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-[#172B3A] tracking-tight leading-[1.15]">
+                            <div className="space-y-4">
+                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-[#172B3A] tracking-tight leading-[1.05]">
                                     {displayName}
                                 </h1>
                                 <p className="text-xl sm:text-2xl font-bold bg-[length:0pt_0pt_0pt_1.5pt] bg-gradient-to-r from-[#0F766E] to-[#115E59] bg-clip-text text-transparent">
@@ -87,7 +112,7 @@ export default function Home({
                                 {heroSummary}
                             </p>
 
-                            <div className="flex flex-wrap items-center gap-4 pt-2">
+                            <div className="flex flex-wrap items-center gap-4">
                                 <Button href="#projects" variant="primary" size="lg" className="hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">
                                     Lihat Proyek
                                 </Button>
@@ -95,52 +120,68 @@ export default function Home({
                                     Hubungi Saya
                                 </Button>
                                 {profile?.hasResume && (
-    <a href="/resume" className="inline-flex items-center justify-center font-medium rounded-xl transition duration-150 ease-in-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] border border-[#DDE5EA] bg-white text-[#172B3A] hover:bg-[#F0F7F6] hover:border-[#64748B] active:bg-[#E3F3EF] px-6 py-3.5 text-lg hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">Unduh CV</a>
+                                    <a href="/resume" className="inline-flex items-center justify-center font-medium rounded-xl transition duration-150 ease-in-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D4ED8] min-h-[44px] border border-[#DDE5EA] bg-white text-[#172B3A] hover:bg-[#F0F7F6] hover:border-[#64748B] active:bg-[#E3F3EF] px-6 py-3.5 text-lg hover:shadow-md hover:shadow-[#0F766E]/20 active:scale-[0.98]">Unduh CV</a>
                                 )}
                             </div>
+
+                            {/* Proof row — angka dari data nyata (props DB) */}
+                            <dl className="grid grid-cols-3 gap-4 border-t border-[#DDE5EA] pt-6 max-w-lg">
+                                {proofStats.map((stat) => (
+                                    <div key={stat.label} className="space-y-1">
+                                        <dt className="order-2 text-xs font-medium uppercase tracking-wider text-[#475569]">
+                                            {stat.label}
+                                        </dt>
+                                        <dd className="order-1 text-3xl font-extrabold tabular-nums text-[#172B3A]">
+                                            {stat.value}
+                                        </dd>
+                                    </div>
+                                ))}
+                            </dl>
                         </div>
 
-                        {/* Monogram / Visual Composition (5 cols) */}
-                        <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                            <div className="w-full max-w-sm rounded-full border-4 border-[#0F766E]/20 bg-white p-4 flex flex-col items-center text-center space-y-4 hover:scale-[1.03] hover:transition-transform">
-                                 {profile?.portraitUrl ? (
-                                     <img
-                                         src={profile.portraitUrl}
-                                         alt="Portrait"
-                                         className="w-28 h-28 rounded-2xl border-2 border-[#0F766E]/20 flex items-center justify-center text-4xl font-extrabold text-[#0F766E] shadow-inner object-cover"
-                                     />
-                                 ) : (
-                                     <div className="w-28 h-28 rounded-2xl bg-[#E3F3EF] border-2 border-[#0F766E]/20 flex items-center justify-center text-4xl font-extrabold text-[#0F766E] shadow-inner">
-                                         BB
-                                     </div>
-                                 )}
-                                <div className="space-y-1">
-                                    <h3 className="font-bold text-lg text-[#172B3A]">
-                                        {displayName}
-                                    </h3>
-                                    <p className="text-xs text-[#475569] font-medium">
-                                        {headline}
-                                    </p>
+                        {/* Portrait card (5 cols) */}
+                        <div className="lg:col-span-5">
+                            <figure className="relative mx-auto max-w-sm overflow-hidden rounded-3xl border border-[#DDE5EA] bg-white shadow-xl transition-transform duration-300 hover:-translate-y-1 motion-reduce:hover:translate-y-0">
+                                <div className="aspect-[4/5] w-full bg-[#F0F7F6]">
+                                    {profile?.portraitUrl ? (
+                                        <img
+                                            src={profile.portraitUrl}
+                                            alt={`Potret ${displayName}`}
+                                            width={profile.portraitWidth ?? undefined}
+                                            height={profile.portraitHeight ?? undefined}
+                                            className="h-full w-full object-cover object-top"
+                                            loading="eager"
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <div className="flex h-full w-full items-center justify-center bg-[#E3F3EF] text-5xl font-extrabold text-[#0F766E]">
+                                            BB
+                                        </div>
+                                    )}
                                 </div>
+                                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B2029]/90 via-[#0B2029]/60 to-transparent px-5 pb-5 pt-12 text-white">
+                                    <p className="text-sm font-semibold">{displayName}</p>
+                                    <p className="text-xs text-white/80">{headline}</p>
+                                </figcaption>
+                            </figure>
 
-                                {socialLinks.length > 0 && (
-                                    <div className="flex items-center gap-3 pt-2">
-                                        {socialLinks.map((social) => (
-                                            <a
-                                                key={social.id}
-                                                href={social.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="px-3 py-1.5 rounded-lg border border-[#DDE5EA] bg-white text-xs font-semibold text-[#172B3A] hover:bg-[#E3F3EF] hover:text-[#0F766E] transition-colors"
-                                            >
-                                                {social.label}
-                                            </a>
-                                        ))}
-                                    </div>
-                                )}
+                            {socialLinks.length > 0 && (
+                                <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+                                    {socialLinks.map((social) => (
+                                        <a
+                                            key={social.id}
+                                            href={social.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="rounded-lg border border-[#DDE5EA] bg-white px-3 py-1.5 text-xs font-semibold text-[#172B3A] transition-colors hover:bg-[#E3F3EF] hover:text-[#0F766E]"
+                                        >
+                                            {social.label}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
-                </div>
                 </div>
             </section>
 
@@ -148,10 +189,10 @@ export default function Home({
             <section id="about" className="py-16 sm:py-20 border-b border-[#DDE5EA]">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="max-w-3xl space-y-6">
-                        <Badge variant="neutral">Tentang & Pendekatan Kerja</Badge>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-[#172B3A] tracking-tight">
-                            Menerjemahkan Kompleksitas Menjadi Solusi yang Andal
-                        </h2>
+                        <SectionHeading
+                            eyebrow="Tentang & Pendekatan Kerja"
+                            title="Menerjemahkan Kompleksitas Menjadi Solusi yang Andal"
+                        />
                         <div className="space-y-4 text-base text-[#475569] leading-relaxed whitespace-pre-line">
                             {profile?.aboutMarkdown || (
                                 <>
@@ -172,12 +213,10 @@ export default function Home({
             <section id="projects" className="py-16 sm:py-20 border-b border-[#DDE5EA] bg-white">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-10">
-                        <div>
-                            <Badge variant="accent">Bukti & Hasil Kerja</Badge>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-[#172B3A] tracking-tight mt-2">
-                                Studi Kasus & Proyek Pilihan
-                            </h2>
-                        </div>
+                        <SectionHeading
+                            eyebrow="Bukti & Hasil Kerja"
+                            title="Studi Kasus & Proyek Pilihan"
+                        />
                         <Button href="/projects" variant="outline" size="sm">
                             Semua Proyek →
                         </Button>
@@ -185,60 +224,7 @@ export default function Home({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {featuredProjects.map((project) => (
-                            <Link
-                                key={project.id}
-                                href={`/projects/${project.slug}`}
-                                className="group block focus-visible:outline-2 focus-visible:outline-[#1D4ED8] rounded-2xl"
-                            >
-                                <Card hoverEffect className="h-full flex flex-col justify-between">
-                                    <div className="space-y-4">
-                                         {project.coverUrl ? (
-                                             <img
-                                                 src={project.coverUrl}
-                                                 alt={project.title}
-                                                 className="w-full h-44 object-contain rounded-xl border border-[#DDE5EA]"
-                                                 loading="lazy"
-                                             />
-                                         ) : (
-                                             <div className="h-44 rounded-xl bg-[#F0F7F6] border border-[#DDE5EA] flex items-center justify-center p-6 text-center group-hover:bg-[#E3F3EF] transition-colors">
-                                                 <span className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
-                                                     {project.category}
-                                                 </span>
-                                             </div>
-                                         )}
-
-                                        <div className="space-y-3">
-                                            <Badge variant="neutral">{project.category}</Badge>
-                                            <h3 className="text-lg font-bold text-[#172B3A] group-hover:text-[#0F766E] transition-colors">
-                                                {project.title}
-                                            </h3>
-                                            <p className="text-sm text-[#475569] line-clamp-3">
-                                                {project.excerpt}
-                                            </p>
-                                        </div>
-
-                                        {project.skills.length > 0 && (
-                                            <div className="flex flex-wrap gap-1.5 pt-2">
-                                                {project.skills.slice(0, 3).map((skill, idx) => (
-                                                    <span
-                                                        key={idx}
-                                                        className="text-xs px-2.5 py-0.5 rounded-md bg-[#F0F7F6] text-[#475569] font-medium"
-                                                    >
-                                                        {skill}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="mt-6 pt-4 border-t border-[#DDE5EA] flex items-center justify-between text-xs text-[#475569]">
-                                        <span>Peran: {project.roleSummary}</span>
-                                        <span className="text-[#0F766E] font-medium group-hover:underline">
-                                            Baca Studi Kasus →
-                                        </span>
-                                    </div>
-                                </Card>
-                            </Link>
+                            <ProjectCard key={project.id} project={project} />
                         ))}
                     </div>
                 </div>
@@ -248,10 +234,7 @@ export default function Home({
             <section id="experience" className="py-16 sm:py-20 border-b border-[#DDE5EA]">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="max-w-2xl mb-10">
-                        <Badge variant="accent">Riwayat Karir</Badge>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-[#172B3A] tracking-tight mt-2">
-                            Pengalaman Profesional
-                        </h2>
+                        <SectionHeading eyebrow="Riwayat Karir" title="Pengalaman Profesional" />
                     </div>
 
                     <div className="space-y-8 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-[#DDE5EA]">
@@ -296,10 +279,7 @@ export default function Home({
             <section id="skills" className="py-16 sm:py-20 border-b border-[#DDE5EA] bg-white">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="max-w-2xl mb-10">
-                        <Badge variant="neutral">Kompetensi Inti</Badge>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-[#172B3A] tracking-tight mt-2">
-                            Keahlian & Disiplin Rekayasa
-                        </h2>
+                        <SectionHeading eyebrow="Kompetensi Inti" title="Keahlian & Disiplin Rekayasa" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -336,13 +316,11 @@ export default function Home({
                 <div className="max-w-6xl mx-auto px-5 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         <div className="lg:col-span-5 space-y-6">
-                            <Badge variant="accent">Mulai Diskusi</Badge>
-                            <h2 className="text-3xl font-bold text-[#172B3A] tracking-tight">
-                                Hubungi Saya
-                            </h2>
-                            <p className="text-base text-[#475569] leading-relaxed">
-                                Tertarik mendiskusikan peluang kolaborasi, konsultasi arsitektur perangkat lunak, atau eksplorasi integrasi solusi AI? Silakan kirimkan pesan melalui formulir ini.
-                            </p>
+                            <SectionHeading
+                                eyebrow="Mulai Diskusi"
+                                title="Hubungi Saya"
+                                lead="Tertarik mendiskusikan peluang kolaborasi, konsultasi arsitektur perangkat lunak, atau eksplorasi integrasi solusi AI? Silakan kirimkan pesan melalui formulir ini."
+                            />
                             <div className="p-5 rounded-2xl bg-[#F0F7F6] border border-[#DDE5EA] space-y-3">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
                                     Komitmen Privasi
@@ -355,6 +333,16 @@ export default function Home({
                                     .
                                 </p>
                             </div>
+
+                            {profile?.publicEmail && (
+                                <a
+                                    href={`mailto:${profile.publicEmail}`}
+                                    className="inline-flex items-center gap-2 text-sm font-medium text-[#0F766E] hover:underline"
+                                >
+                                    <span className="text-[#475569] font-normal">Atau tulis langsung ke</span>
+                                    {profile.publicEmail}
+                                </a>
+                            )}
                         </div>
 
                         <div className="lg:col-span-7">

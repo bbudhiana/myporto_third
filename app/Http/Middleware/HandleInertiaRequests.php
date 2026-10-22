@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -38,6 +40,15 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
+            ],
+            'site' => fn () => [
+                'name' => config('app.name'),
+                'url' => rtrim((string) config('app.url'), '/'),
+                'location' => Cache::remember(
+                    'site.location',
+                    now()->addMinutes(10),
+                    fn () => Profile::published()->value('location')
+                ),
             ],
         ];
     }

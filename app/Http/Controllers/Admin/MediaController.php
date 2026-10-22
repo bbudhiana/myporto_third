@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Media;
 use App\Models\Profile;
 use App\Models\Project;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -49,18 +50,40 @@ class MediaController extends Controller
 
         // Generate randomized safe storage name per PRD 7 & 12
         $extension = $file->getClientOriginalExtension();
-        $randomName = Str::random(40) . '.' . $extension;
+        $randomName = Str::random(40).'.'.$extension;
         $path = $file->storeAs('uploads', $randomName, 'public');
 
         [$width, $height] = str_starts_with($mime, 'image/')
             ? @getimagesize($file->getRealPath()) ?: [null, null]
             : [null, null];
 
+        $mimeType = $mime;
+        $bytes = $file->getSize();
+
+        // Ship WebP instead of multi-megabyte PNG/JPEG originals.
+        // The original file is kept next to it (same base name) so the
+        // conversion can always be redone from the untouched source.
+        if (str_starts_with($mime, 'image/') && $mime !== 'image/webp') {
+            $optimized = ImageOptimizer::optimize(
+                Storage::disk('public')->path($path),
+                'public',
+                $path
+            );
+
+            if ($optimized !== null) {
+                $path = $optimized['path'];
+                $mimeType = $optimized['mime'];
+                $bytes = $optimized['bytes'];
+                $width = $optimized['width'];
+                $height = $optimized['height'];
+            }
+        }
+
         Media::create([
             'disk' => 'public',
             'path' => $path,
-            'mime_type' => $mime,
-            'bytes' => $file->getSize(),
+            'mime_type' => $mimeType,
+            'bytes' => $bytes,
             'width' => $width,
             'height' => $height,
             'alt_text' => $request->input('alt_text'),

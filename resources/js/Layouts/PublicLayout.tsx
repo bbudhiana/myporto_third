@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import Button from '@/Components/UI/Button';
 
 interface Props {
@@ -7,10 +7,20 @@ interface Props {
     children: React.ReactNode;
 }
 
+interface SiteProps {
+    site?: {
+        name?: string;
+        url?: string;
+        location?: string | null;
+    };
+}
+
 export default function PublicLayout({ children }: Props) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const { site } = usePage().props as SiteProps;
+    const profileLocation = site?.location;
 
     // Keyboard escape listener to close mobile menu & restore focus per PRD 4
     useEffect(() => {
@@ -142,6 +152,16 @@ export default function PublicLayout({ children }: Props) {
                 {children}
             </main>
 
+            {/* Sticky mobile CTA */}
+            <div className="sm:hidden fixed inset-x-0 bottom-0 z-30 border-t border-[#DDE5EA] bg-white/95 backdrop-blur-xs px-4 py-3">
+                <a
+                    href="/#contact"
+                    className="flex w-full items-center justify-center rounded-xl bg-[#0F766E] px-5 py-3 text-base font-medium text-white transition hover:bg-[#115E59] active:scale-[0.98]"
+                >
+                    Hubungi Saya
+                </a>
+            </div>
+
             {/* Semantic Footer per PRD 6.3 */}
             <footer className="border-t border-[#DDE5EA] bg-white mt-16 sm:mt-24">
                 <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
@@ -158,6 +178,11 @@ export default function PublicLayout({ children }: Props) {
                             <p className="mt-2 text-sm text-[#475569] max-w-md">
                                 Senior Software & AI Engineer. Merancang perangkat lunak dan solusi AI dengan fokus pada kebutuhan bisnis, keandalan sistem, dan kemudahan pengembangan.
                             </p>
+                            {profileLocation && (
+                                <p className="mt-3 text-xs font-medium text-[#475569]">
+                                    {profileLocation}
+                                </p>
+                            )}
                         </div>
 
                         {/* Navigation links & Privacy */}

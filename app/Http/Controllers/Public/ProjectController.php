@@ -34,6 +34,8 @@ class ProjectController extends Controller
                 'roleSummary' => $proj->role_summary,
                 'featured' => (bool) $proj->featured,
                 'coverUrl' => $proj->coverMedia?->url,
+                'coverWidth' => $proj->coverMedia?->width,
+                'coverHeight' => $proj->coverMedia?->height,
                 'skills' => $proj->skills->map(fn ($s) => $s->name),
             ]);
 
@@ -66,12 +68,16 @@ class ProjectController extends Controller
                 'projectUrl' => $project->project_url,
                 'repositoryUrl' => $project->repository_url,
                 'coverUrl' => $project->coverMedia?->url,
+                'coverWidth' => $project->coverMedia?->width,
+                'coverHeight' => $project->coverMedia?->height,
                 'skills' => $project->skills->map(fn ($s) => $s->name),
                 'media' => $project->media->map(fn ($m) => [
                     'id' => $m->id,
                     'url' => $m->url,
                     'altText' => $m->alt_text,
                     'caption' => $m->pivot->caption,
+                    'width' => $m->width,
+                    'height' => $m->height,
                 ]),
             ],
         ]);

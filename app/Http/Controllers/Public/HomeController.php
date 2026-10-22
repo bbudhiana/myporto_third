@@ -60,6 +60,8 @@ class HomeController extends Controller
                 'category' => $proj->category,
                 'roleSummary' => $proj->role_summary,
                 'coverUrl' => $proj->coverMedia?->url,
+                'coverWidth' => $proj->coverMedia?->width,
+                'coverHeight' => $proj->coverMedia?->height,
                 'skills' => $proj->skills->map(fn ($s) => $s->name),
             ]);
 
@@ -80,8 +82,11 @@ class HomeController extends Controller
                 'heroSummary' => $profile->hero_summary,
                 'aboutMarkdown' => $profile->about_markdown,
                 'location' => $profile->location,
+                'publicEmail' => $profile->public_email,
                 'hasResume' => $profile->resume_media_id !== null,
                 'portraitUrl' => $profile->portraitMedia?->url,
+                'portraitWidth' => $profile->portraitMedia?->width,
+                'portraitHeight' => $profile->portraitMedia?->height,
             ] : null,
             'experiences' => $experiences,
             'skillGroups' => $skillGroups,
