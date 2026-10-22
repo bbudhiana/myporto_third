@@ -204,6 +204,50 @@ class AdminPanelTest extends TestCase
         $this->assertDatabaseCount('media', 0);
     }
 
+    public function test_media_upload_converts_a_photo_to_webp_with_the_correct_orientation(): void
+    {
+        Storage::fake('public');
+
+        // Foto potret dengan EXIF Orientation 6: pixel mentah landscape,
+        // tapi harus disimpan tegak (dimensi tertukar).
+        $image = imagecreatetruecolor(600, 400);
+        imagefill($image, 0, 0, imagecolorallocate($image, 15, 118, 110));
+        for ($i = 0; $i < 8; $i++) {
+            imagefilledrectangle(
+                $image,
+                40 + $i * 70,
+                120,
+                90 + $i * 70,
+                260,
+                imagecolorallocate($image, 255, 255, 255)
+            );
+        }
+        ob_start();
+        imagejpeg($image, null, 92);
+        imagedestroy($image);
+        $jpeg = ob_get_clean();
+
+        $tiff = 'II'.pack('v', 42).pack('V', 8)
+            .pack('v', 1)
+            .pack('v', 0x0112).pack('v', 3).pack('V', 1).pack('v', 6).pack('v', 0)
+            .pack('V', 0);
+        $payload = "Exif\0\0".$tiff;
+        $jpeg = "\xFF\xD8"."\xFF\xE1".pack('n', strlen($payload) + 2).$payload.substr($jpeg, 2);
+
+        $response = $this->actingAs($this->admin)->post('/admin/media/upload', [
+            'file' => UploadedFile::fake()->createWithContent('photo.jpg', $jpeg),
+        ]);
+
+        $response->assertSessionHasNoErrors();
+
+        $media = Media::firstWhere('mime_type', 'image/webp');
+
+        $this->assertNotNull($media, 'Foto seharusnya dikonversi ke WebP.');
+        $this->assertSame(400, $media->width, 'Lebar harus tertukar karena orientasi 6.');
+        $this->assertSame(600, $media->height, 'Tinggi harus tertukar karena orientasi 6.');
+        $this->assertTrue(Storage::disk('public')->exists($media->path));
+    }
+
     public function test_media_cannot_be_deleted_if_used_in_profile_or_project(): void
     {
         Storage::fake('public');
